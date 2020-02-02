@@ -12,7 +12,11 @@ public class LevelManager : MonoBehaviour
     public GameObject player;
     public bool levelComplete;
 
+    private bool shouldPlayEndLevelSoundEffect = false;
+
     private bool shouldAdvanceToNextLevel = false;
+    private bool shouldStartEndLevelWait = true;
+
     void Start()
     {
         walls = GetComponentsInChildren<Wall>();
@@ -23,10 +27,13 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        if (walls.All(x => x.isHit == true))
+        if (walls.All(x => x.isHit == true) && shouldStartEndLevelWait)
         {
+            shouldStartEndLevelWait = false;
             levelComplete = true;
             StartCoroutine("WaitToEndLevel");
+            Debug.Log("level complete is playing");
+            GetComponent<AudioSource>().Play();
         }
 
         if (levelComplete && shouldAdvanceToNextLevel) {

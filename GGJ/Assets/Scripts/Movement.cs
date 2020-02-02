@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    public AudioSource boxPushAudio;
+    public AudioSource boxBumpAudio;
+
+    public GameObject ghostModel;
     public Vector3 moveDirection = new Vector3(1, 0, 0);
     private bool  leftInput;
     private bool  rightInput;
@@ -59,8 +63,11 @@ public class Movement : MonoBehaviour
             moveDirection = new Vector3(0, -1, 0);
         }
 
+        updateGhostFacingDirection();
+
 
         Move(moveDirection);
+
 
         
     }
@@ -79,22 +86,17 @@ public class Movement : MonoBehaviour
             canWalk = false;
             if (ShouldWrap())
             {
-                // if there is a box
-                    // if box should stop wrapping
-                        // stop player
-                    // if not stop 
-                        // box move
-                        // player move
                 gridPosition = RoundComponenttoInt(WrapTo());
                 
                 if (shouldTravelwithBox)
                 {
                     boxBeforeMe.transform.position += RoundComponenttoInt(moveDirection);
+                    boxPushAudio.Play();
                 }
             }
             else if (shouldStop || shouldStopBeforeWrapBox)
             {
-                // stop the player
+                boxBumpAudio.Play();
             }
             else
             {
@@ -103,6 +105,7 @@ public class Movement : MonoBehaviour
                 if (shouldTravelwithBox)
                 {
                     boxBeforeMe.transform.position += RoundComponenttoInt(moveDirection);
+                    boxPushAudio.Play();
                 }
             }
             transform.position = gridPosition;  // TODO: smoothing
@@ -217,6 +220,16 @@ public class Movement : MonoBehaviour
         canWalk = true;
         shouldStop = false;
         
+    }
+
+    void updateGhostFacingDirection()
+    {
+
+        transform.LookAt(transform.position + moveDirection, -Vector3.forward);
+
+        // Vector3 localForward = transform.right;
+        // Quaternion targetRotation = Quaternion.FromToRotation(localForward, moveDirection) * transform.rotation;
+        // transform.rotation = targetRotation;
     }
 
     
