@@ -21,6 +21,11 @@ public class Wall : MonoBehaviour
             wallRenderer.material.SetColor("_Color", Color.red);
             transform.position = hitPosition;
         }
+        else
+        {
+            wallRenderer.material.SetColor("_Color", Color.black);
+
+        }
     }
 
      
