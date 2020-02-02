@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public Vector3 moveDirection;
+    public Vector3 moveDirection = new Vector3(1, 0, 0);
     private bool  leftInput;
     private bool  rightInput;
     private bool  upInput;
@@ -12,13 +12,21 @@ public class Movement : MonoBehaviour
 
     public float walkWait = 1f;
     public bool canWalk = true;
+    public bool shouldStop = false;
 
     public Vector3 gridPosition;
 
+
+    public Vector3 originPosition;
+    private Vector3 originMoveDirection;
+    public bool shouldTravelwithBox =  false;
+    public Box boxBeforeMe;
+
     void Start()
     {
+        originPosition = transform.position; 
+        originMoveDirection = moveDirection;
         gridPosition = transform.position;
-        moveDirection = new Vector3(1, 0, 0);
     }
 
     void Update()
@@ -65,9 +73,18 @@ public class Movement : MonoBehaviour
             {
                 gridPosition = RoundComponenttoInt(WrapTo());
             }
-            else 
+            else if (shouldStop)
+            {
+                // stop the player
+            }
+            else
             {
                 gridPosition += RoundComponenttoInt(moveDirection);
+
+                if (shouldTravelwithBox)
+                {
+                    boxBeforeMe.transform.position += RoundComponenttoInt(moveDirection);
+                }
             }
             transform.position = gridPosition;  // TODO: smoothing
             StartCoroutine("WalkWait");
@@ -76,21 +93,51 @@ public class Movement : MonoBehaviour
         
     }
 
+    // raycast next hit object
     bool ShouldWrap()
     {
+        shouldStop = false;
+        shouldTravelwithBox = false;
         RaycastHit hit;
 
         Debug.DrawRay(transform.position, moveDirection, Color.red);
 
         if (Physics.Raycast(transform.position, moveDirection, out hit, 1f))
         {
-            hit.transform.gameObject.GetComponent<Wall>().isHit = true;
-            return true;
-        }
+            if (hit.transform.gameObject.GetComponent<Wall>() != null)
+            {
+                hit.transform.gameObject.GetComponent<Wall>().isHit = true;
+                return true;
+            }
+            else if (hit.transform.gameObject.GetComponent<Box>() != null) 
+            {
+                boxBeforeMe = hit.transform.gameObject.GetComponent<Box>();
+                if (ShouldStopBeforeBox(boxBeforeMe))
+                {
+                    shouldStop = true;
+                }
+                else
+                {
+                    shouldTravelwithBox = true;
+                }
 
+            }   
+        }
         return false;
     }
 
+    // if hit a box, check should stop result
+    bool ShouldStopBeforeBox(Box hitBox)
+    {
+        int boxHitInfo = hitBox.BoxHitInfo(moveDirection);
+        if (boxHitInfo >= 0)  // 0 is wall, 1 is box
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // raycast wrap position
     Vector3 WrapTo()
     {
         RaycastHit hit;
@@ -112,6 +159,15 @@ public class Movement : MonoBehaviour
     Vector3 RoundComponenttoInt(Vector3 v3)
     {
         return new Vector3(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y),Mathf.RoundToInt(v3.z));
+    }
+
+    public void ResetPlayer()
+    {
+        transform.position = originPosition;
+        gridPosition = originPosition;
+        moveDirection = originMoveDirection;
+        canWalk = true;
+        shouldStop = false;
     }
 
     
