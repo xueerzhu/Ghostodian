@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -132,6 +132,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BottomWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148033728431601391, guid: 585c399568435184d8fa942d9b15fb24,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6148033728431601939, guid: 585c399568435184d8fa942d9b15fb24,
         type: 3}
@@ -268,6 +273,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: RightWall
       objectReference: {fileID: 0}
+    - target: {fileID: 5937915402686629388, guid: ab806f16efa41a242ace865f8de739a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5937915402686629388, guid: ab806f16efa41a242ace865f8de739a8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab806f16efa41a242ace865f8de739a8, type: 3}
 --- !u!4 &181101207 stripped
@@ -348,6 +363,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftWall
       objectReference: {fileID: 0}
+    - target: {fileID: 5937915402686629388, guid: ab806f16efa41a242ace865f8de739a8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab806f16efa41a242ace865f8de739a8, type: 3}
 --- !u!4 &395493038 stripped
@@ -367,6 +387,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TopWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148033728431601391, guid: 585c399568435184d8fa942d9b15fb24,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6148033728431601939, guid: 585c399568435184d8fa942d9b15fb24,
         type: 3}
@@ -671,12 +696,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e7f94f81b693d4abac64f4825d7e39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDirection: {x: 0, y: 0, z: 0}
-  walkWait: 0.5
-  canWalk: 1
-  shouldStop: 0
-  gridPosition: {x: 0, y: 0, z: 0}
-  originPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: -1, z: 0}
+  walkWait: 1
+  shouldTravelwithBox: 0
+  boxBeforeMe: {fileID: 0}
+  shouldStopBeforeWrapBox: 0
 --- !u!1001 &2464713191094510535
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -688,6 +712,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Box
+      objectReference: {fileID: 0}
+    - target: {fileID: 3499263951529986150, guid: ba869c64a51924f59a104fcf0dcb7d61,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5431938546949789392, guid: ba869c64a51924f59a104fcf0dcb7d61,
         type: 3}

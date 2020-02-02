@@ -11,22 +11,28 @@ public class Movement : MonoBehaviour
     private bool  downInput;
 
     public float walkWait = 1f;
-    public bool canWalk = true;
-    public bool shouldStop = false;
 
-    public Vector3 gridPosition;
+    private bool canWalk = false;
+    private bool shouldStop = false;
+
+    private Vector3 gridPosition;
 
 
-    public Vector3 originPosition;
+    private Vector3 originPosition;
     private Vector3 originMoveDirection;
-    public bool shouldTravelwithBox =  false;
+
+    [SerializeField]
+    private bool shouldTravelwithBox =  false;
     public Box boxBeforeMe;
+    [SerializeField]
+    private bool shouldStopBeforeWrapBox = false;
 
     void Start()
     {
         originPosition = transform.position; 
         originMoveDirection = moveDirection;
         gridPosition = transform.position;
+        StartCoroutine("WalkWait");
     }
 
     void Update()
@@ -64,16 +70,29 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(walkWait);
         canWalk = true;
     }
+
     void Move(Vector3 direction)
     {
         if (canWalk)
         {
+            StartCoroutine("WalkWait");
             canWalk = false;
             if (ShouldWrap())
             {
+                // if there is a box
+                    // if box should stop wrapping
+                        // stop player
+                    // if not stop 
+                        // box move
+                        // player move
                 gridPosition = RoundComponenttoInt(WrapTo());
+                
+                if (shouldTravelwithBox)
+                {
+                    boxBeforeMe.transform.position += RoundComponenttoInt(moveDirection);
+                }
             }
-            else if (shouldStop)
+            else if (shouldStop || shouldStopBeforeWrapBox)
             {
                 // stop the player
             }
@@ -87,7 +106,7 @@ public class Movement : MonoBehaviour
                 }
             }
             transform.position = gridPosition;  // TODO: smoothing
-            StartCoroutine("WalkWait");
+            
         }
 
         
@@ -98,6 +117,7 @@ public class Movement : MonoBehaviour
     {
         shouldStop = false;
         shouldTravelwithBox = false;
+        shouldStopBeforeWrapBox = false;
         RaycastHit hit;
 
         Debug.DrawRay(transform.position, moveDirection, Color.red);
@@ -106,6 +126,23 @@ public class Movement : MonoBehaviour
         {
             if (hit.transform.gameObject.GetComponent<Wall>() != null)
             {
+                
+                Vector3 wrapToLocation = WrapTo();
+
+                // is there a box at my wrapping location?
+                RaycastHit isBoxThere;
+                int layerMaskBox = 1 << 9;  // bit shift layer 9: box
+                if (Physics.Raycast(wrapToLocation - moveDirection * 0.5f, moveDirection, out isBoxThere, 0.5f, layerMaskBox))
+                {
+                    shouldStopBeforeWrapBox = ShouldStopBeforeBox(isBoxThere.transform.gameObject.GetComponent<Box>());
+                    if (!shouldStopBeforeWrapBox)
+                    {
+                        shouldTravelwithBox = true;
+                        hit.transform.gameObject.GetComponent<Wall>().isHit = true;
+                        return true;
+                    }
+                
+                }
                 hit.transform.gameObject.GetComponent<Wall>().isHit = true;
                 return true;
             }
@@ -140,12 +177,21 @@ public class Movement : MonoBehaviour
     // raycast wrap position
     Vector3 WrapTo()
     {
+        
         RaycastHit hit;
         Vector3 wraptToPosition = new Vector3();
-        if (Physics.Raycast(transform.position, -moveDirection, out hit, 20f))
+        int layerMaskWall = 1 << 8;  // bit shift layer 8: wall
+        if (Physics.Raycast(transform.position, -moveDirection, out hit, 20f, layerMaskWall))  // the opposite wall is hit
         {
-            hit.transform.gameObject.GetComponent<Wall>().isHit = true;
-            wraptToPosition = (hit.point + moveDirection * 0.5f);
+            
+
+            if (hit.transform.gameObject.GetComponent<Wall>() != null)
+            {
+                hit.transform.gameObject.GetComponent<Wall>().isHit = true;
+                
+                wraptToPosition = (hit.point + moveDirection * 0.5f);
+            }
+            
         }
         else
         {
@@ -163,11 +209,13 @@ public class Movement : MonoBehaviour
 
     public void ResetPlayer()
     {
+        StopAllCoroutines();
         transform.position = originPosition;
         gridPosition = originPosition;
         moveDirection = originMoveDirection;
         canWalk = true;
         shouldStop = false;
+        
     }
 
     

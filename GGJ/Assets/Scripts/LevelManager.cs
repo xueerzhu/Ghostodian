@@ -35,8 +35,9 @@ public class LevelManager : MonoBehaviour
 
     void RestartLevel()
     {
-        player.GetComponent<Movement>().ResetPlayer();
-        walls.ToList().ForEach(x => x.isHit = false);
-        boxes.ToList().ForEach(x => x.ResetBox());
+        // player.GetComponent<Movement>().ResetPlayer();
+        // walls.ToList().ForEach(x => x.isHit = false);
+        // boxes.ToList().ForEach(x => x.ResetBox());
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
