@@ -37,6 +37,11 @@ public class Box : MonoBehaviour
             {
                 return 1;
             }
+            else if (hit.transform.gameObject.GetComponent<Movement>() != null)
+            {
+                // hit a player
+                return -2;
+            }
 
         }
         return -1;

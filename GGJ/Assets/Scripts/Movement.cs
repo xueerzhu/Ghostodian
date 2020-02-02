@@ -134,6 +134,7 @@ public class Movement : MonoBehaviour
                 int layerMaskBox = 1 << 9;  // bit shift layer 9: box
                 if (Physics.Raycast(wrapToLocation - moveDirection * 0.5f, moveDirection, out isBoxThere, 0.5f, layerMaskBox))
                 {
+                    boxBeforeMe = isBoxThere.transform.gameObject.GetComponent<Box>();
                     shouldStopBeforeWrapBox = ShouldStopBeforeBox(isBoxThere.transform.gameObject.GetComponent<Box>());
                     if (!shouldStopBeforeWrapBox)
                     {

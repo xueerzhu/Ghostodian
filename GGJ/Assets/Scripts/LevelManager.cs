@@ -6,10 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    public float levelEndDelay = 7.0f;
     public Wall[] walls;
     public Box[] boxes;
     public GameObject player;
     public bool levelComplete;
+
+    private bool shouldAdvanceToNextLevel = false;
     void Start()
     {
         walls = GetComponentsInChildren<Wall>();
@@ -23,7 +26,11 @@ public class LevelManager : MonoBehaviour
         if (walls.All(x => x.isHit == true))
         {
             levelComplete = true;
-            //SceneManager.LoadScene(SceneManager.GetActiveScene ().buildIndex + 1);
+            StartCoroutine("WaitToEndLevel");
+        }
+
+        if (levelComplete && shouldAdvanceToNextLevel) {
+            SceneManager.LoadScene(SceneManager.GetActiveScene ().buildIndex + 1);
         }
 
         if (Input.GetButtonDown("Replay"))  //TODO: no controller replay configured yet
@@ -40,4 +47,11 @@ public class LevelManager : MonoBehaviour
         // boxes.ToList().ForEach(x => x.ResetBox());
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    IEnumerator WaitToEndLevel()
+    {
+        yield return new WaitForSeconds(levelEndDelay);
+        shouldAdvanceToNextLevel = true;
+    }
+
 }

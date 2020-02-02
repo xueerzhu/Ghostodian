@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 929746210163823285}
   - component: {fileID: 999607732665212968}
   - component: {fileID: 6722165281369615656}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,3 +106,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99bd08fccb2074227acff29d708e996e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originPosition: {x: 0, y: 0, z: 0}

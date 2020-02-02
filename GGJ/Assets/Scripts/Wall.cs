@@ -20,6 +20,17 @@ public class Wall : MonoBehaviour
         {
             wallRenderer.material.SetColor("_Color", Color.red);
             transform.position = hitPosition;
+
+
+            if (transform.localScale.x < 1.101f){
+                transform.localScale += 0.002f*Vector3.right; 
+            }
+            if (transform.localScale.y < 0.101f){
+                transform.localScale += 0.002f*Vector3.up; 
+            }
+            if (transform.localScale.z < 5.0f){
+                transform.localScale += 0.02f*Vector3.forward; 
+            }
         }
         else
         {
