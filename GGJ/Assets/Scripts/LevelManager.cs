@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -12,13 +13,13 @@ public class LevelManager : MonoBehaviour
         walls = GetComponentsInChildren<Wall>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (walls.All(x => x.isHit == true))
         {
             levelComplete = true;
-            Debug.Log("levelComplete");
+            SceneManager.LoadScene(SceneManager.GetActiveScene ().buildIndex + 1);
         }
 
     }
