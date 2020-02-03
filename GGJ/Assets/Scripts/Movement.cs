@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour
 {
     public AudioSource boxPushAudio;
     public AudioSource boxBumpAudio;
+    public bool inputEnabled = true;
 
     public GameObject ghostModel;
     public Vector3 moveDirection = new Vector3(1, 0, 0);
@@ -41,11 +42,13 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        leftInput = Input.GetButtonDown("Left");
-        rightInput = Input.GetButtonDown("Right");
-        upInput = Input.GetButtonDown("Up");
-        downInput = Input.GetButtonDown("Down");
-
+        if (inputEnabled)
+        {
+            leftInput = Input.GetButtonDown("Left");
+            rightInput = Input.GetButtonDown("Right");
+            upInput = Input.GetButtonDown("Up");
+            downInput = Input.GetButtonDown("Down");
+        }
         if (leftInput)
         {
             moveDirection = new Vector3(-1, 0, 0);

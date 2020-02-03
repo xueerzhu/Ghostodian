@@ -22,6 +22,9 @@ public class LevelManager : MonoBehaviour
         walls = GetComponentsInChildren<Wall>();
         boxes = GetComponentsInChildren<Box>();
 
+        PlayBackgroundMusic.Instance.Play();
+        
+
     }
 
 

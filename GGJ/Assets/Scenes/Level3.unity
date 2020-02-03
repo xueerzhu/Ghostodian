@@ -928,7 +928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7032c853a2aea474ba1ce96132833a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelEndDelay: 7
+  levelEndDelay: 6
   walls: []
   boxes: []
   player: {fileID: 0}
